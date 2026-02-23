@@ -2,6 +2,8 @@
 
 This project provides an automated, zero-touch metadata scraper for DEF CON videos, alongside a pre-configured Jellyfin media server (Kiosk) optimized for offline viewing and conference environments. 
 
+Over 2400 .NFO files with abstracts and speakers listed.  Scripts grab talks and then rename them (to "DEF CON - S08E35 - [talk title]") so Jellyfin can easily injest them.  Over a dozen speaker photographs are included (with more coming) so when you go into speaker details you get a pic of them.
+
 ## Prerequisites
 * Docker and Docker Compose installed.
 
