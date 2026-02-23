@@ -1,0 +1,38 @@
+services:
+  # --- 1. The Custom Jellyfin Kiosk ---
+  jellyfin-cons:
+    image: ghcr.io/conmetadata/jellyfin-cons:latest
+    container_name: jellyfin-cons
+    ports:
+      - "8096:8096"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Toronto
+      # Variables required by the kiosk setup script
+      - ADMIN_USER=admin
+      - ADMIN_PASS=ChangeMeAdmin
+      - GUEST_USER=guest
+      - GUEST_PASS=ChangeMeGuest
+      - TV_SHOW_DIR=/data/shows
+    volumes:
+      # Automatically creates local folders in the directory where the command is run
+      - ./data/jellyfin/config:/config
+      - ./data/jellyfin/cache:/cache
+      - ./data/media/shows:/data/shows
+    restart: unless-stopped
+
+  # --- 2. The Zero-Touch Scraper ---
+  infocon-scraper:
+    image: ghcr.io/conmetadata/infocon-scraper:latest
+    container_name: infocon-scraper
+    environment:
+      - PUID=1000
+      - GITHUB_REPO=ConMetadata/DEFCON-Metadata
+      - SEED_JELLYFIN_PEOPLE=true
+    volumes:
+      # These must match the Jellyfin paths exactly
+      - ./data/jellyfin/config:/config 
+      - ./data/media/shows:/data/shows
+    depends_on:
+      - jellyfin-cons
